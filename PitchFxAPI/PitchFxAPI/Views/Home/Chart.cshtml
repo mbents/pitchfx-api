@@ -1,0 +1,14 @@
+﻿@model PitchFxAPI.Models.QueryModel
+@{
+    var chart = new Chart(width: 600, height: 400, theme: ChartTheme.Blue)
+                        .AddTitle("Linear Regression Chart")
+                        .SetXAxis(title: Model.XAxisVarId)
+                        .SetYAxis(title: Model.YAxisVarId)
+                        .AddSeries(chartType: "Point", 
+                            xValue: Model.XValues,
+                            yValues: Model.YValues)
+                            .AddSeries(chartType: "Line", 
+                                xValue: Model.XValuesForRegression,
+                                yValues: Model.YValuesForRegression)
+                        .Write();
+}

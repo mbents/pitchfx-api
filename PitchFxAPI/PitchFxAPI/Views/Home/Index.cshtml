@@ -1,0 +1,79 @@
+﻿@model PitchFxAPI.Models.QueryModel
+
+<div id="body">
+    <aside>
+        <p>
+            Definitions of the different variables.
+        </p>
+        <ul>
+            <li>
+                <b>start_speed:</b> the pitch speed, in miles per hour and in three dimensions, measured at the initial point, y0. The pitcher’s "velocity".
+            </li>
+            <li>
+                <b>pz:</b> the height of the pitch in feet as it crossed the front of home plate.
+            </li>
+            <li>
+                <b>spin_rate:</b> the number of rotations per minute that the ball made when it left the pitcher's hand.
+            </li>
+            <li>
+                <b>break_length:</b> the measurement of the greatest distance, in inches, between the trajectory of the pitch at any point between the release point and the front of home plate, and the straight line path from the release point and the front of home plate.
+            </li>
+        </ul>
+    </aside>
+    <section class="title">
+        <div class="content-wrapper main-content clear-fix">
+            <p>
+                Choose variables for the x-axis and the y-axis, then choose some operators and enter threshold values.<br />
+                Choose a pitch type and pitch outcome (both optional), then click the button to run a correlation.
+            </p>
+            @using (Html.BeginForm())
+            { 
+                @Html.ValidationSummary(true)
+                
+                <fieldset>
+                    <legend>Query form</legend>
+                    <ol>
+                        <li>
+                            @Html.LabelFor(x => x.XAxisVarId)
+                            @Html.DropDownListFor(model => model.XAxisVarId, Model.XAxisVariables)
+                            @Html.ValidationMessageFor(x => x.XAxisVarId)
+                            &nbsp;
+                            @Html.DropDownListFor(x => x.XAxisVarOperatorId, Model.XAxisVarOperators)
+                            @Html.ValidationMessageFor(x => x.XAxisVarOperatorId)
+                            &nbsp;
+                            @Html.TextBoxFor(x => x.XAxisVarValue, new { @style = "width:60px;" })
+                            @Html.ValidationMessageFor(x => x.XAxisVarValue)
+                        </li>
+                        <li>
+                            @Html.LabelFor(x => x.YAxisVarId)
+                            @Html.DropDownListFor(x => x.YAxisVarId, Model.YAxisVariables)
+                            @Html.ValidationMessageFor(x => x.YAxisVarId)
+                            &nbsp;
+                            @Html.DropDownListFor(x => x.YAxisVarOperatorId, Model.YAxisVarOperators)
+                            @Html.ValidationMessageFor(x => x.YAxisVarOperatorId)
+                            &nbsp;
+                            @Html.TextBoxFor(x => x.YAxisVarValue, new { @style = "width:60px;" })
+                            @Html.ValidationMessageFor(x => x.YAxisVarValue)
+                        </li>
+                        <li>
+                            @Html.LabelFor(x => x.PitchTypeId)
+                            @Html.DropDownListFor(x => x.PitchTypeId, Model.PitchTypes, string.Empty)
+                        </li>
+                        <li>
+                            @Html.LabelFor(x => x.PitchDescriptionId)
+                            @Html.DropDownListFor(x => x.PitchDescriptionId, Model.PitchDescriptions, string.Empty)
+                        </li>
+                    </ol>
+                    <input id="process" type="submit" value="Calculate Correlation" />
+                </fieldset>
+            }
+        </div>
+    </section>
+    <section class="content-wrapper">
+        @Html.LabelFor(x => x.CorrelationCoefficient, new { @style = string.Format("display: {0};", Model.CorrelationCoefficient.HasValue ? "inline" : "none") })
+        @Html.TextBoxFor(x => x.CorrelationCoefficient, new { @style = string.Format("display: {0};", Model.CorrelationCoefficient.HasValue ? "inline" : "none") })
+    </section>
+    <section class="content-wrapper">
+        @Html.ActionLink("Click to view linear regression chart", "ShowChart", "Home", null, new { @style = string.Format("display: {0};", Model.CorrelationCoefficient.HasValue ? "inline" : "none") })
+    </section>
+</div>
